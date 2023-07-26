@@ -3,3 +3,16 @@ simple app to reproduce issue with otel instrumentation of a spring boot app wit
 
 Saw an NPE in a Spring Boot 3 app in the OTel Netty instrumentation, appears correlated with a Pulsar Consumer/Producer
 which connects to a `pulsar+ssl://` endpoint
+
+
+# how to build & run 
+
+```shell 
+mvn clean package jib:dockerBuild
+
+# if on m1 laptop, set arch via jib.platform-arch property:
+mvn compile jib:dockerBuild -Djib.platform-arch=arm64
+
+```
+
+#
