@@ -1,0 +1,58 @@
+
+logging:
+  pattern:
+    level: '%5p %mdc'
+
+management:
+  # the actuator health endpoint `/actuator/health` returns status for all enabled health check indicators
+  #
+  # the liveness probe is available at `/livez` or `/actuator/health/liveness` and will return status of only livenessState.
+  #
+  # the readiness probe is available at `/health` or `/actuator/health/readiness` and will return status of readinessState,
+  # and critical dependencies (db, consul in this case)
+  #
+  # in k8s environment, we would use
+  #   `/health` for startup and readiness probes
+  #   `/livez` for liveness probe
+  endpoints:
+    # by default, disable all management endpoints.
+    # we will enable and expose only the health endpoint.
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      enabled: true
+      # default to not showing details or components
+      show-details: never
+      show-components: never
+      probes:
+        enabled: true
+        # make health group probes available on main server port.
+        # by default, this exposes readiness and liveness as `/readyz` and `/livez`
+        add-additional-paths: true
+      group:
+        liveness:
+          include: livenessState
+          # by default, liveness is available at `server:/livez`
+          additional-path: server:/livez
+        readiness:
+          include: readinessState
+          # by default, readiness is available at `server:/readyz`
+          # but, for Pipeline deployments this must be `/health`
+          additional-path: server:/health
+  health:
+    # by default disable all health indicators and only enable the ones in our readiness/liveness groups.
+    defaults:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+    db:
+      enabled: true
+    consulApi:
+      enabled: true
+
