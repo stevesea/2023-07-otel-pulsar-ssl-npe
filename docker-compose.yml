@@ -1,0 +1,26 @@
+
+version: "3.9"
+
+services:
+  pulsar:
+    image: docker.overstock.com/kezhenxu94/pulsar
+    networks:
+      - mynet
+    ports:
+      - 8081:8080
+      - 6650:6650
+      - 6651:6651
+    volumes:
+      - pulsar-data-volume:/pulsar/data
+    command:
+      - "/bin/sh"
+      - "-c"
+      - >-
+        /pulsar/bin/apply-config-from-env.py /pulsar/conf/standalone.conf && /pulsar/bin/pulsar standalone --no-functions-worker --no-stream-storage
+
+networks:
+  mynet:
+    name: mynet
+
+volumes:
+  pulsar-data-volume:

@@ -1,196 +1,212 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>otel-pulsar-ssl-npe</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>otel-pulsar-ssl-npe</name>
-	<description>Demo project for Spring Boot</description>
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2022.0.3</spring-cloud.version>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<pulsar.version>3.0.0</pulsar.version>
-		<snakeyaml.version>2.0</snakeyaml.version>
-		<opentelemetry-api.version>1.28.0</opentelemetry-api.version>
-		<opentelemetry-javaagent.version>1.28.0</opentelemetry-javaagent.version>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>otel-pulsar-ssl-npe</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>otel-pulsar-ssl-npe</name>
+    <description>Demo project for Spring Boot</description>
+    <properties>
+        <java.version>17</java.version>
 
-		<jib.platform-arch>amd64</jib.platform-arch>
-		<jib.platform-os>linux</jib.platform-os>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
 
-		<dependency>
-			<groupId>org.apache.pulsar</groupId>
-			<artifactId>pulsar-client-original</artifactId>
-			<version>${pulsar.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.yaml</groupId>
-					<artifactId>snakeyaml</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <pulsar.version>3.0.0</pulsar.version>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <snakeyaml.version>2.0</snakeyaml.version>
+
+        <opentelemetry-api.version>1.28.0</opentelemetry-api.version>
+        <opentelemetry-javaagent.version>1.28.0</opentelemetry-javaagent.version>
+
+        <jib.platform-arch>amd64</jib.platform-arch>
+        <jib.platform-os>linux</jib.platform-os>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client-original</artifactId>
+            <version>${pulsar.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 
-		<dependency>
-			<groupId>io.opentelemetry.javaagent</groupId>
-			<artifactId>opentelemetry-javaagent</artifactId>
-			<version>${opentelemetry-javaagent.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <version>${opentelemetry-javaagent.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-api</artifactId>
-		</dependency>
-	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>io.opentelemetry</groupId>
-				<artifactId>opentelemetry-bom</artifactId>
-				<version>${opentelemetry-api.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry-api.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+    <build>
+        <plugins>
 
-			<!-- Extract the New Relic and OpenTelemetry agents into target/, renaming Jars without version #  -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-otel</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>io.opentelemetry.javaagent</groupId>
-									<artifactId>opentelemetry-javaagent</artifactId>
-									<version>${opentelemetry-javaagent.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<destFileName>opentelemetry-javaagent.jar</destFileName>
-									<outputDirectory>${project.build.directory}/otel</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.3.2</version>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>dockerBuild</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<from>
-						<image>docker.overstock.com/eclipse-temurin:17-jre</image>
-						<platforms>
-							<platform>
-								<architecture>${jib.platform-arch}</architecture>
-								<os>${jib.platform-os}</os>
-							</platform>
-						</platforms>
-					</from>
-					<to>
-						<image>${project.name}:${project.version}</image>
-					</to>
-					<extraDirectories>
-						<paths>
-							<!-- Add files in src/main/jib to the docker image. -->
-							<path>src/main/jib</path>
-							<!-- Add the OpenTelemetry agent jar to the docker image -->
-							<path>
-								<from>${project.build.directory}/otel</from>
-								<into>/app/otel</into>
-							</path>
-						</paths>
-						<permissions>
-							<permission>
-								<file>/app/entrypoint.sh</file>
-								<mode>755</mode>
-							</permission>
-						</permissions>
-					</extraDirectories>
-					<container>
-						<ports>
-							<port>8080</port>
-						</ports>
-						<labels>
-							<ostk.app.name>${project.name}</ostk.app.name>
-							<ostk.app.type>webservice</ostk.app.type>
-						</labels>
-						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-						<user>nobody</user>
-						<entrypoint>
-							<arg>/app/entrypoint.sh</arg>
-						</entrypoint>
-						<environment>
-							<!-- NOTE: APP_VERSION will be overridden by Pipeline's k8s Deployment,
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>--add-exports java.base/sun.net=ALL-UNNAMED</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+
+                <configuration>
+                    <jvmArguments>
+                        --add-exports java.base/sun.net=ALL-UNNAMED
+                        -Xdebug
+                        -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005
+                        -javaagent:${project.build.directory}/otel/opentelemetry-javaagent.jar
+                    </jvmArguments>
+                    <environmentVariables>
+                        <OTEL_JAVAAGENT_CONFIGURATION_FILE>src/main/jib/app/otel/otel.properties</OTEL_JAVAAGENT_CONFIGURATION_FILE>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+
+            <!-- Extract the New Relic and OpenTelemetry agents into target/, renaming Jars without version #  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-otel</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>io.opentelemetry.javaagent</groupId>
+                                    <artifactId>opentelemetry-javaagent</artifactId>
+                                    <version>${opentelemetry-javaagent.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>opentelemetry-javaagent.jar</destFileName>
+                                    <outputDirectory>${project.build.directory}/otel</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.2</version>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>dockerBuild</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17-jre</image>
+                        <platforms>
+                            <platform>
+                                <architecture>${jib.platform-arch}</architecture>
+                                <os>${jib.platform-os}</os>
+                            </platform>
+                        </platforms>
+                    </from>
+                    <to>
+                        <image>${project.name}:${project.version}</image>
+                    </to>
+                    <extraDirectories>
+                        <paths>
+                            <!-- Add files in src/main/jib to the docker image. -->
+                            <path>src/main/jib</path>
+                            <!-- Add the OpenTelemetry agent jar to the docker image -->
+                            <path>
+                                <from>${project.build.directory}/otel</from>
+                                <into>/app/otel</into>
+                            </path>
+                        </paths>
+                    </extraDirectories>
+                    <container>
+                        <ports>
+                            <port>8080</port>
+                        </ports>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                        <user>nobody</user>
+                        <environment>
+                            <!-- NOTE: APP_VERSION will be overridden by Pipeline's k8s Deployment,
                              putting it here will make sure it's set if run locally -->
-							<APP_VERSION>${project.version}</APP_VERSION>
-							<OTEL_SERVICE_NAME>${project.name}</OTEL_SERVICE_NAME>
-							<NEW_RELIC_APP_NAME>${project.name}</NEW_RELIC_APP_NAME>
-							<JAVA_TOOL_OPTIONS>-javaagent:/app/otel/opentelemetry-javaagent.jar -XX:+UseG1GC  -XX:MaxRAMPercentage=80.0</JAVA_TOOL_OPTIONS>
-							<JDK_JAVA_OPTIONS>-server</JDK_JAVA_OPTIONS>
-							<OTEL_JAVAAGENT_CONFIGURATION_FILE>/app/otel/otel.properties</OTEL_JAVAAGENT_CONFIGURATION_FILE>
-						</environment>
-					</container>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+                            <JAVA_TOOL_OPTIONS>-javaagent:/app/otel/opentelemetry-javaagent.jar -XX:+UseG1GC
+                                -XX:MaxRAMPercentage=80.0
+                            </JAVA_TOOL_OPTIONS>
+                            <JDK_JAVA_OPTIONS>-server --add-exports java.base/sun.net=ALL-UNNAMED</JDK_JAVA_OPTIONS>
+                            <OTEL_JAVAAGENT_CONFIGURATION_FILE>/app/otel/otel.properties</OTEL_JAVAAGENT_CONFIGURATION_FILE>
+                            <OTEL_SERVICE_NAME>${project.name}</OTEL_SERVICE_NAME>
+                            <OTEL_RESOURCE_ATTRIBUTES>service.name=${project.name},service.version=${project.version}
+                            </OTEL_RESOURCE_ATTRIBUTES>
+                        </environment>
+                    </container>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

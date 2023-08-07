@@ -3,6 +3,9 @@ logging:
   pattern:
     level: '%5p %mdc'
 
+pulsar:
+  service-url: pulsar://localhost:6650
+
 management:
   endpoints:
     enabled-by-default: false
@@ -26,10 +29,38 @@ management:
           include: readinessState
           additional-path: server:/health
   health:
-    # by default disable all health indicators and only enable the ones in our readiness/liveness groups.
     defaults:
       enabled: false
     livenessState:
       enabled: true
     readinessState:
       enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: localhost-ssl
+
+pulsar:
+  service-url: pulsar+ssl://localhost:6651
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker-nossl
+
+pulsar:
+  service-url: pulsar://pulsar:6650
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker-ssl
+
+pulsar:
+  service-url: pulsar://pulsar:6651
