@@ -4,7 +4,7 @@ logging:
     level: '%5p %mdc'
 
 pulsar:
-  service-url: pulsar://localhost:6650
+  service-url: pulsar+ssl://localhost:6651
 
 management:
   endpoints:
@@ -40,10 +40,10 @@ management:
 spring:
   config:
     activate:
-      on-profile: localhost-ssl
+      on-profile: localhost-nossl
 
 pulsar:
-  service-url: pulsar+ssl://localhost:6651
+  service-url: pulsar://localhost:6650
 
 
 ---

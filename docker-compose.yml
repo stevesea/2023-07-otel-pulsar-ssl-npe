@@ -3,7 +3,7 @@ version: "3.9"
 
 services:
   pulsar:
-    image: docker.overstock.com/kezhenxu94/pulsar
+    image: kezhenxu94/pulsar
     networks:
       - mynet
     ports:

@@ -202,6 +202,7 @@
                             <OTEL_SERVICE_NAME>${project.name}</OTEL_SERVICE_NAME>
                             <OTEL_RESOURCE_ATTRIBUTES>service.name=${project.name},service.version=${project.version}
                             </OTEL_RESOURCE_ATTRIBUTES>
+                            <SPRING_PROFILES_ACTIVE>docker-ssl</SPRING_PROFILES_ACTIVE>
                         </environment>
                     </container>
                 </configuration>
